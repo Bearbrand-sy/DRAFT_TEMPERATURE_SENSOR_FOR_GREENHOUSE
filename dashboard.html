@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greenhouse Monitoring Dashboard</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+header h1 {
+  font-size: 28px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+header button {
+  padding: 10px 25px;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+}
+
+header button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
+}
+
+/* Layout */
+.main-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 25px;
+}
+
+/* Card Styling */
+.left-container, .right-container {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Section spacing */
+.section {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.section h3 {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #667eea;
+  font-size: 18px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Info rows with better styling */
+.info-row {
+  margin-bottom: 12px;
+  font-size: 15px;
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.info-row:hover {
+  border-left-color: #667eea;
+  transform: translateX(5px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.info-row b {
+  color: #667eea;
+  font-weight: 600;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-normal {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+}
+
+.status-warning {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.status-on {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.status-off {
+  background: #e0e0e0;
+  color: #666;
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+th {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 10px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+td {
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+tr:hover td {
+  background: #f8f9ff;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Dropdown & report button */
+.controls {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+#logSelect {
+  flex: 1;
+  min-width: 150px;
+  padding: 10px 15px;
+  border-radius: 25px;
+  border: 2px solid #667eea;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+#logSelect:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+}
+
+#generateReport {
+  flex: 1;
+  min-width: 150px;
+  padding: 10px 25px;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(56, 239, 125, 0.4);
+}
+
+#generateReport:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(56, 239, 125, 0.6);
+}
+
+/* Alert styling */
+.alert-item {
+  padding: 12px;
+  margin-bottom: 10px;
+  background: white;
+  border-radius: 8px;
+  border-left: 4px solid #f5576c;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.alert-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Metric cards */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.metric-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.metric-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.metric-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #667eea;
+  margin-bottom: 5px;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .main-container {
+    grid-template-columns: 1fr;
+  }
+  
+  header h1 {
+    font-size: 22px;
+  }
+  
+  .controls {
+    flex-direction: column;
+  }
+  
+  #logSelect, #generateReport {
+    width: 100%;
+  }
+}
+
+/* Loading animation */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Tooltip */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  background: #333;
+  color: white;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-bottom: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🌱 Greenhouse Monitoring Dashboard</h1>
+  <button onclick="logout()">Logout</button>
+</header>
+
+<div class="main-container">
+
+  <!-- LEFT CONTAINER -->
+  <div class="left-container">
+
+    <!-- Metric Cards -->
+    <div class="metrics-grid">
+      <div class="metric-card tooltip" data-tooltip="Current Temperature">
+        <div class="metric-icon">🌡️</div>
+        <div class="metric-value">26.5°C</div>
+        <div class="metric-label">Temperature</div>
+      </div>
+      <div class="metric-card tooltip" data-tooltip="Current Humidity">
+        <div class="metric-icon">💧</div>
+        <div class="metric-value">68%</div>
+        <div class="metric-label">Humidity</div>
+      </div>
+      <div class="metric-card tooltip" data-tooltip="Irrigation Status">
+        <div class="metric-icon">🚿</div>
+        <div class="metric-value"><span class="status-badge status-on">ON</span></div>
+        <div class="metric-label">Irrigation</div>
+      </div>
+      <div class="metric-card tooltip" data-tooltip="System Status">
+        <div class="metric-icon">⚙️</div>
+        <div class="metric-value"><span class="status-badge status-normal">OK</span></div>
+        <div class="metric-label">System</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>🌿 Plant Profile</h3>
+      <div class="info-row">
+        <span>Plant Name:</span>
+        <b>Tomato</b>
+      </div>
+      <div class="info-row">
+        <span>Ideal Temperature:</span>
+        <b>18 – 27 °C</b>
+      </div>
+      <div class="info-row">
+        <span>Ideal Humidity:</span>
+        <b>60 – 70 %</b>
+      </div>
+      <div class="info-row">
+        <span>Growth Status:</span>
+        <span class="status-badge status-normal">Optimal</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>⚙️ Automation Settings</h3>
+      <div class="info-row">
+        <span>Humidity Threshold:</span>
+        <b>65 %</b>
+      </div>
+      <div class="info-row">
+        <span>Temperature Limit:</span>
+        <b>30 °C</b>
+      </div>
+      <div class="info-row">
+        <span>Auto Irrigation:</span>
+        <span class="status-badge status-on">Enabled</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>🔔 Recent Alerts</h3>
+      <div class="alert-item">
+        <strong>⚠️ Low Humidity Detected</strong><br>
+        <small style="color: #666;">Irrigation system activated automatically</small>
+      </div>
+      <div class="alert-item" style="border-left-color: #38ef7d;">
+        <strong>✓ Temperature Normal</strong><br>
+        <small style="color: #666;">All readings within optimal range</small>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT CONTAINER -->
+  <div class="right-container">
+
+    <div class="section">
+      <h3>📋 Sensor Data Logs</h3>
+
+      <div class="controls">
+        <select id="logSelect" onchange="filterLogs()">
+          <option value="daily">📅 Daily Logs</option>
+          <option value="weekly">📆 Weekly Logs</option>
+          <option value="monthly">🗓️ Monthly Logs</option>
+        </select>
+        <button id="generateReport" onclick="generateReport()">
+          📊 Generate Report
+        </button>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table id="logTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Temp (°C)</th>
+              <th>Humidity (%)</th>
+              <th>Irrigation</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="logBody">
+            <!-- Daily Data -->
+            <tr data-logtype="daily">
+              <td>2026-01-29</td>
+              <td>09:00</td>
+              <td>25.8</td>
+              <td>72</td>
+              <td><span class="status-badge status-off">OFF</span></td>
+              <td><span class="status-badge status-normal">Normal</span></td>
+            </tr>
+            <tr data-logtype="daily">
+              <td>2026-01-29</td>
+              <td>09:30</td>
+              <td>26.4</td>
+              <td>65</td>
+              <td><span class="status-badge status-on">ON</span></td>
+              <td><span class="status-badge status-warning">Low Humidity</span></td>
+            </tr>
+            <tr data-logtype="daily">
+              <td>2026-01-29</td>
+              <td>10:00</td>
+              <td>26.5</td>
+              <td>68</td>
+              <td><span class="status-badge status-on">ON</span></td>
+              <td><span class="status-badge status-normal">Normal</span></td>
+            </tr>
+            <!-- Weekly Data -->
+            <tr data-logtype="weekly">
+              <td>2026-01-25</td>
+              <td>10:00</td>
+              <td>26.9</td>
+              <td>71</td>
+              <td><span class="status-badge status-off">OFF</span></td>
+              <td><span class="status-badge status-normal">Normal</span></td>
+            </tr>
+            <tr data-logtype="weekly">
+              <td>2026-01-22</td>
+              <td>14:30</td>
+              <td>27.1</td>
+              <td>67</td>
+              <td><span class="status-badge status-off">OFF</span></td>
+              <td><span class="status-badge status-normal">Normal</span></td>
+            </tr>
+            <!-- Monthly Data -->
+            <tr data-logtype="monthly">
+              <td>2026-01-05</td>
+              <td>11:00</td>
+              <td>27.2</td>
+              <td>69</td>
+              <td><span class="status-badge status-off">OFF</span></td>
+              <td><span class="status-badge status-normal">Normal</span></td>
+            </tr>
+            <tr data-logtype="monthly">
+              <td>2026-01-15</td>
+              <td>15:45</td>
+              <td>26.8</td>
+              <td>70</td>
+              <td><span class="status-badge status-off">OFF</span></td>
+              <td><span class="status-badge status-normal">Normal</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// Initialize with daily logs
+window.onload = function() {
+  filterLogs();
+}
+
+// Logout function
+function logout() {
+  if (confirm("Are you sure you want to logout?")) {
+    alert("You have been logged out!");
+    window.location.href = "index.html";
+  }
+}
+
+// Filter logs by dropdown
+function filterLogs() {
+  const filter = document.getElementById("logSelect").value;
+  const rows = document.querySelectorAll("#logBody tr");
+  
+  rows.forEach(row => {
+    if (row.dataset.logtype === filter) {
+      row.style.display = "";
+      // Add fade-in animation
+      row.style.animation = "fadeInUp 0.5s ease";
+    } else {
+      row.style.display = "none";
+    }
+  });
+}
+
+// Generate CSV report with enhanced UX
+function generateReport() {
+  const button = document.getElementById("generateReport");
+  const originalText = button.innerHTML;
+  
+  // Show loading state
+  button.innerHTML = '<span class="loading"></span> Generating...';
+  button.disabled = true;
+  
+  setTimeout(() => {
+    const filter = document.getElementById("logSelect").value;
+    const table = document.getElementById("logTable");
+    let csv = [];
+    
+    // Add headers
+    let headerRow = [];
+    for (let j = 0; j < table.rows[0].cells.length; j++) {
+      headerRow.push(table.rows[0].cells[j].innerText);
+    }
+    csv.push(headerRow.join(","));
+    
+    // Add data rows (only visible ones)
+    const rows = document.querySelectorAll("#logBody tr");
+    rows.forEach(row => {
+      if (row.dataset.logtype === filter) {
+        let dataRow = [];
+        for (let j = 0; j < row.cells.length; j++) {
+          // Clean up the text (remove extra spaces from badges)
+          dataRow.push(row.cells[j].innerText.trim());
+        }
+        csv.push(dataRow.join(","));
+      }
+    });
+
+    const csvString = csv.join("\n");
+    const blob = new Blob([csvString], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', `greenhouse_${filter}_report_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    // Reset button
+    button.innerHTML = '✓ Report Generated!';
+    setTimeout(() => {
+      button.innerHTML = originalText;
+      button.disabled = false;
+    }, 2000);
+  }, 1000);
+}
+
+// Add smooth scroll behavior
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    document.querySelector(this.getAttribute('href')).scrollIntoView({
+      behavior: 'smooth'
+    });
+  });
+});
+</script>
+
+</body>
+</html>
