@@ -128,8 +128,7 @@
 <div class="login-container">
   <div class="logo-container">
     <div class="logo-icon">🌱</div>
-    <h2>Greenhouse System</h2>
-    <p class="subtitle">Monitor and control your greenhouse environment</p>
+    <h2>NBSC Greenhouse System</h2>
   </div>
 
   <div class="error-message" id="errorMsg"></div>
@@ -144,7 +143,7 @@
     <div class="input-group">
       <span class="input-icon">🔒</span>
       <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
-      <span class="password-toggle" onclick="togglePassword()" id="toggleIcon">👁️</span>
+      <span class="password-toggle" onclick="togglePassword()" id="toggleIcon"></span>
     </div>
 
     <div class="remember-forgot">
@@ -152,7 +151,7 @@
         <input type="checkbox" id="rememberMe">
         <span>Remember me</span>
       </label>
-      <a href="#" class="forgot-password" onclick="forgotPassword(event)">Forgot Password?</a>
+      
     </div>
 
     <button type="submit" id="loginBtn">
@@ -206,8 +205,8 @@ function login(event){
 function togglePassword(){
   const input=document.getElementById("password");
   const icon=document.getElementById("toggleIcon");
-  if(input.type==="password"){ input.type="text"; icon.innerText="🙈"; }
-  else{ input.type="password"; icon.innerText="👁️"; }
+  if(input.type==="password"){ input.type="text"; icon.innerText="👁"; }
+  else{ input.type="password"; icon.innerText="👁"; }
 }
 
 function forgotPassword(event){
