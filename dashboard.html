@@ -6,210 +6,244 @@
 <title>Greenhouse Monitoring Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background:#f0f2f5;
-  min-height:100vh;
-  display:flex;
-}
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+          font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background:#f0f2f5;
+          min-height:100vh;
+          display:flex;
+        }
 
-/* Sidebar */
-.sidebar {
-  width: 220px;
-  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  display:flex;
-  flex-direction: column;
-  padding:20px;
-}
-.sidebar h2 {
-  font-size:22px;
-  margin-bottom:30px;
-  text-align:center;
-}
-.sidebar button {
-  background: transparent;
-  border: none;
-  color: white;
-  text-align: left;
-  padding: 15px 10px;
-  font-size:16px;
-  cursor:pointer;
-  border-radius:8px;
-  transition: background 0.3s ease;
-  margin-bottom:10px;
-}
-.sidebar button:hover, .sidebar button.active {
-  background: rgba(255,255,255,0.2);
-}
+        /* Sidebar */
+        .sidebar {
+          width: 250px;
+          background: linear-gradient(180deg, #213885 0%, #0f1a58 100%);
+          color: white;
+          display:flex;
+          flex-direction: column;
+          padding:10px;
+        }
+        .sidebar h2 {
+          font-size:22px;
+          margin-bottom:20px;
+          text-align:center;
+        }
+        .sidebar button {
+          background: transparent;
+          border: none;
+          color: white;
+          text-align: left;
+          padding: 10px 6px;
+          font-size:16px;
+          cursor:pointer;
+          border-radius:8px;
+          transition: background 0.3s ease;
+          margin-bottom:5px;
+        }
+        .sidebar button:hover, .sidebar button.active {
+          background: rgba(255,255,255,0.2);
+        }
 
-/* Main content */
-.main-content {
-  flex:1;
-  padding:20px;
-  overflow-y:auto;
-}
+        /* Main content */
+        .main-content {
+          flex:1;
+          padding:20px;
+          overflow-y:auto;
+        }
 
-.section {
-  background:white;
-  padding:20px;
-  margin-bottom:20px;
-  border-radius:12px;
-  box-shadow:0 4px 15px rgba(0,0,0,0.1);
-  animation: fadeInUp 0.5s ease;
-}
-@keyframes fadeInUp {
-  from { opacity:0; transform:translateY(30px);}
-  to { opacity:1; transform:translateY(0);}
-}
+        .section {
+          background:white;
+          padding:20px;
+          margin-bottom:20px;
+          border-radius:5px;
+          animation: fadeInUp 0.5s ease;
+        }
+        @keyframes fadeInUp {
+          from { opacity:0; transform:translateY(30px);}
+          to { opacity:1; transform:translateY(0);}
+        }
 
-/* Metric Cards */
-.metrics-grid {
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap:15px;
-  margin-bottom:20px;
-}
-.metric-card {
-  background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-  color:white;
-  padding:20px;
-  border-radius:12px;
-  text-align:center;
-}
-.metric-icon { font-size:32px; margin-bottom:10px; }
-.metric-value { font-size:22px; font-weight:700; }
-.metric-label { font-size:12px; text-transform:uppercase; opacity:0.8; }
+        /* Metric Cards */
+        .metrics-grid {
+          display:grid;
+          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          gap:15px;
+          margin-bottom:20px;
+        }
+        .metric-card {
+          background: linear-gradient(135deg,#2949b4 0%, #0f1a58 100%);
+          color:white;
+          padding:20px;
+          border-radius:12px;
+          text-align:center;
+        }
+        .metric-icon { font-size:32px; margin-bottom:10px; }
+        .metric-value { font-size:22px; font-weight:1000; }
+        .metric-label { font-size:12px; text-transform:uppercase; opacity:0.8; }
 
-/* Info Rows */
-.info-row {
-  margin-bottom:12px;
-  font-size:15px;
-  padding:10px;
-  background:#f7f9fc;
-  border-radius:8px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-left:4px solid transparent;
-  transition: all 0.3s ease;
-}
-.info-row:hover { border-left-color:#667eea; transform:translateX(5px); }
-.info-row b { color:#667eea; font-weight:600; }
+        /* Info Rows */
+        .info-row {
+          margin-bottom:3px;
+          font-size:15px;
+          padding:10px;
+          background:#f7f9fc;
+          border-radius:8px;
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          border-left:4px solid transparent;
+          transition: all 0.3s ease;
+        }
+        
+        .info-row b { color:#667eea; font-weight:600; }
 
-/* Status badges */
-.status-badge {
-  display:inline-block;
-  padding:4px 12px;
-  border-radius:20px;
-  font-size:13px;
-  font-weight:600;
-}
-.status-normal { background:#38ef7d; color:white; }
-.status-warning { background:#f5576c; color:white; }
-.status-on { background:#667eea; color:white; }
-.status-off { background:#e0e0e0; color:#666; }
+        /* Status badges */
+        .status-badge {
+          display:inline-block;
+          padding:4px 12px;
+          border-radius:20px;
+          font-size:13px;
+          font-weight:600;
+        }
+        .status-normal { background:#38ef7d; color:white; }
+        .status-warning { background:#f5576c; color:white; }
+        .status-on { background:#667eea; color:white; }
+        .status-off { background:#e0e0e0; color:#666; }
 
-/* Table styling */
-table {
-  width:100%;
-  border-collapse:separate;
-  border-spacing:0;
-  border-radius:12px;
-  overflow:hidden;
-}
-th {
-  background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-  color:white;
-  padding:12px;
-}
-td { padding:10px; text-align:center; border-bottom:1px solid #f0f0f0; }
+        /* Table styling */
+        table {
+          width:100%;
+          border-collapse:separate;
+          border-spacing:0;
+          border-radius:12px;
+          overflow:hidden;
+        }
+        th {
+          background: linear-gradient(135deg, #3356c9 0%, #152686 100%);
+          color:white;
+          padding:12px;
+        }
+        td { padding:10px; text-align:center; border-bottom:1px solid #f0f0f0; }
 
-/* Controls */
-.controls {
-  display:flex;
-  gap:10px;
-  margin-bottom:15px;
-  flex-wrap:wrap;
-}
-#logSelect, #generateReport, .irrigation-btn {
-  padding:10px 15px;
-  border-radius:25px;
-  border:none;
-  cursor:pointer;
-  font-weight:600;
-  transition: all 0.3s ease;
-}
-#logSelect { border:2px solid #667eea; background:white; flex:1; min-width:130px; }
-#generateReport { background:#38ef7d; color:white; flex:1; min-width:130px; }
-#generateReport:hover { transform:translateY(-2px); }
-.irrigation-btn { background:#667eea; color:white; min-width:120px; }
-.irrigation-btn.active { background:#38ef7d; }
+        /* Controls */
+        .controls {
+          display:flex;
+          gap:10px;
+          margin-bottom:10px;
+          flex-wrap:wrap;
+        }
+        #logSelect, #generateReport, .irrigation-btn {
+          width: 10rem;
+          padding:10px 15px;
+          border-radius:10px;
+          border:none;
+          cursor:pointer;
+          font-weight:600;
+          transition: all 0.3s ease;
+        }
+        #logSelect { border:2px solid #667eea; background:white; flex:1; min-width:130px; }
+        #generateReport { background:#1da852; color:white; flex:1; width: 10rem; }
+        #generateReport:hover { transform:translateY(-2px); }
+        .irrigation-btn { background:#667eea; color:white; min-width:120px; }
+        .irrigation-btn.active { background:#38ef7d; }
 
-/* Graph */
-#graphContainer { max-height:300px; }
 
-/* Responsive */
-@media(max-width:900px){
-  .main-content{padding:10px;}
-  .metrics-grid{grid-template-columns:repeat(auto-fit,minmax(100px,1fr));}
-}
+        #graphContainer { max-height:300px; }
+
+
+
+        .dashboard {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+        }
+
+        @media(max-width:900px){
+          .main-content{padding:10px;}
+          .metrics-grid{grid-template-columns:repeat(auto-fit,minmax(100px,1fr));}
+        }
+
+        @media (max-width: 768px) {
+          .dashboard {
+            grid-template-columns: 1fr;
+          }
+        }
+
 </style>
 </head>
 <body>
 
-<div class="sidebar">
-  <h2>🌱 Greenhouse</h2>
-  <button class="active" onclick="showSection('monitoring')">Monitoring</button>
-  <button onclick="showSection('dataLogs')">Data Logs</button>
-  <button onclick="showSection('graphs')">Graphs</button>
-  <button style="margin-top:auto;" onclick="logout()">Logout</button>
-</div>
+        <div class="sidebar">
+          <h2>🌱 Greenhouse NBSC</h2>
+          <button class="active" onclick="showSection('monitoring')">Monitoring</button>
+          <button onclick="showSection('dataLogs')">Data Logs</button>
+          <button onclick="showSection('graphs')">Graphs</button>
+          <button style="margin-top:32rem;" onclick="logout()">Logout</button>
+        </div>
 
-<div class="main-content">
+        <div class="main-content">
 
-  <!-- Monitoring Section -->
-  <div class="section" id="monitoring">
-    <h3>🌿 Monitoring Dashboard</h3>
-    <div class="metrics-grid">
-      <div class="metric-card"><div class="metric-icon">🌡️</div><div class="metric-value">26.5°C</div><div class="metric-label">Temperature</div></div>
-      <div class="metric-card"><div class="metric-icon">💧</div><div class="metric-value">68%</div><div class="metric-label">Humidity</div></div>
-      <div class="metric-card"><div class="metric-icon">🚿</div><div class="metric-value"><span class="status-badge status-on">ON</span></div><div class="metric-label">Irrigation</div></div>
-      <div class="metric-card"><div class="metric-icon">⚙️</div><div class="metric-value"><span class="status-badge status-normal">OK</span></div><div class="metric-label">System</div></div>
-    </div>
+          <!-- Monitoring Section -->
+          <div class="section" id="monitoring">
+            <h3 style="margin-bottom: 1rem;"> Monitoring Dashboard</h3>
+            <div class="metrics-grid">
+              <div class="metric-card"><div class="metric-icon">💧</div><div class="metric-value">68%</div><div class="metric-label"> Humidity</div></div> 
+              <div class="metric-card"><div class="metric-icon">🌡️</div><div class="metric-value">26.5°C</div><div class="metric-label">Temperature</div></div>      
+              <div class="metric-card"><div class="metric-icon">💧</div><div class="metric-value">  45%</div><div class="metric-label"> Soil Moisture</div></div>
+               <div class="metric-card"><div class="metric-icon">🚿</div><div class="metric-value"><span class="status-badge status-on">ON</span></div><div class="metric-label">Irrigation</div></div>
+                <div class="metric-card"><div class="metric-icon">𖣘</div><div class="metric-value"><span class="status-badge status-on">ON</span></div><div class="metric-label">Ventilation</div></div>
+            </div>
 
-    <div class="section">
-      <h3>🌱 Plant Details</h3>
-      <div class="info-row"><span>Plant Name:</span><b>Tomato</b></div>
-      <div class="info-row"><span>Ideal Temperature:</span><b>18 – 27 °C</b></div>
-      <div class="info-row"><span>Ideal Humidity:</span><b>60 – 70 %</b></div>
-      <div class="info-row"><span>Growth Status:</span><span class="status-badge status-normal">Optimal</span></div>
-    </div>
+            <div class="dashboard">
+          <div class="section">
+            <h3 style="margin-bottom: 1rem;"> Plant Details</h3>
+            <div class="info-row"><span>Plant Name:</span><b>Grapes</b></div>
+            <div class="info-row"><span>Ideal Temperature:</span><b>15 – 30 °C</b></div>
+            <div class="info-row"><span>Ideal Humidity:</span><b>50 – 60 %</b></div>
+            <div class="info-row"><span>Ideal Soil Moisture:</span><b>60 – 70 %</b></div>
+            <div class="info-row">
+              <span>Growth Status:</span>
+              <span class="status-badge status-normal">Optimal</span>
+            </div>
+          </div>
 
-    <div class="section">
-      <h3>⚙️ Automation Settings</h3>
-      <div class="info-row"><span>Humidity Threshold:</span><b>65 %</b></div>
-      <div class="info-row"><span>Temperature Limit:</span><b>30 °C</b></div>
-      <div class="info-row"><span>Auto Irrigation:</span><span class="status-badge status-on">Enabled</span></div>
-    </div>
+          <div class="section">
+            <h3 style="margin-bottom: 1rem;"> Automation Settings</h3>
+            <div class="info-row"><span>Humidity Threshold:</span><b>65 %</b></div>
+            <div class="info-row"><span>Temperature Limit:</span><b>30 °C</b></div>
+            <div class="info-row">
+              <span>Auto Irrigation:</span>
+              <span class="status-badge status-on">Enabled</span>
+              <span>Auto Ventilation:</span>
+              <span class="status-badge status-on">Enabled</span>
+            </div>
+
+            <div class="controls" style="margin-top:15px;">
+              <button class="irrigation-btn" onclick="toggleIrrigation(this)">Automatic</button>
+              <button class="irrigation-btn" onclick="toggleIrrigation(this)">Manual</button>
+            </div>
+          </div>
+        </div>
   </div>
 
   <!-- Data Logs Section -->
   <div class="section" id="dataLogs" style="display:none;">
-    <h3>📋 Sensor Data Logs</h3>
+    <h3> Sensor Data Logs</h3>
 
-    <div class="controls">
+    <div class="controls" style="width: 10rem; margin-top: 0.5rem;">
       <select id="logSelect" onchange="filterLogs()">
-        <option value="daily">📅 Daily</option>
-        <option value="weekly">📆 Weekly</option>
-        <option value="monthly">🗓️ Monthly</option>
+        <option value="daily"> Daily</option>
+        <option value="weekly"> Weekly</option>
+        <option value="monthly"> Monthly</option>
+        
       </select>
-      <button id="generateReport" onclick="generateReport()">📊 Generate Report</button>
+     
     </div>
 
     <div style="overflow-x:auto;">
+      <button id="generateReport" onclick="generateReport()" style="width: 10rem; margin-bottom: 0.5rem;"> Generate Report</button>
       <table id="logTable">
+        
         <thead>
           <tr><th>Date</th><th>Time</th><th>Temp (°C)</th><th>Humidity (%)</th><th>Irrigation</th></tr>
         </thead>
@@ -223,85 +257,19 @@ td { padding:10px; text-align:center; border-bottom:1px solid #f0f0f0; }
         </tbody>
       </table>
     </div>
+    
   </div>
 
   <!-- Graph Section -->
   <div class="section" id="graphs" style="display:none;">
-    <h3>📊 Temperature & Humidity Graph</h3>
+    <h3> Temperature & Humidity Graph</h3>
     <canvas id="graphContainer"></canvas>
-    <div class="controls" style="margin-top:15px;">
-      <button class="irrigation-btn" onclick="toggleIrrigation(this)">Automatic</button>
-      <button class="irrigation-btn" onclick="toggleIrrigation(this)">Manual</button>
-    </div>
+    
   </div>
 
+  
 </div>
 
-<script>
-// Navigation
-function showSection(sectionId){
-  const sections=['monitoring','dataLogs','graphs'];
-  sections.forEach(id=>document.getElementById(id).style.display='none');
-  document.getElementById(sectionId).style.display='block';
-  document.querySelectorAll('.sidebar button').forEach(btn=>btn.classList.remove('active'));
-  document.querySelector(`.sidebar button[onclick="showSection('${sectionId}')"]`).classList.add('active');
-}
-
-// Logout
-function logout(){ if(confirm("Are you sure you want to logout?")) window.location.href="index.html"; }
-
-// Filter Logs
-function filterLogs(){
-  const filter=document.getElementById("logSelect").value;
-  document.querySelectorAll("#logBody tr").forEach(row=>row.style.display=(row.dataset.logtype===filter?"":"none"));
-}
-
-// Generate CSV
-function generateReport(){
-  const button=document.getElementById("generateReport");
-  button.innerHTML='Generating...'; button.disabled=true;
-  setTimeout(()=>{
-    const filter=document.getElementById("logSelect").value;
-    const table=document.getElementById("logTable"); let csv=[];
-    let headerRow=[]; for(let j=0;j<table.rows[0].cells.length;j++) headerRow.push(table.rows[0].cells[j].innerText);
-    csv.push(headerRow.join(","));
-    const rows=document.querySelectorAll("#logBody tr");
-    rows.forEach(row=>{ if(row.dataset.logtype===filter){
-      let dataRow=[]; for(let j=0;j<row.cells.length;j++) dataRow.push(row.cells[j].innerText.trim());
-      csv.push(dataRow.join(","));
-    }});
-    const blob=new Blob([csv.join("\n")],{type:'text/csv'});
-    const url=window.URL.createObjectURL(blob); const a=document.createElement('a');
-    a.href=url; a.download=`greenhouse_${filter}_report_${new Date().toISOString().split('T')[0]}.csv`;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    button.innerHTML='✓ Report Generated!';
-    setTimeout(()=>{button.innerHTML='📊 Generate Report'; button.disabled=false;},2000);
-  },1000);
-}
-
-// Chart.js Graph
-const ctx=document.getElementById('graphContainer').getContext('2d');
-const chart=new Chart(ctx,{
-  type:'line',
-  data:{
-    labels:['09:00','09:30','10:00','10:30','11:00'],
-    datasets:[
-      { label:'Temperature (°C)', data:[25.8,26.4,26.5,26.7,27.0], borderColor:'#667eea', fill:false, tension:0.3 },
-      { label:'Humidity (%)', data:[72,65,68,70,69], borderColor:'#38ef7d', fill:false, tension:0.3 }
-    ]
-  },
-  options:{ responsive:true, plugins:{legend:{position:'top'}}, scales:{y:{beginAtZero:false}} }
-});
-
-// Irrigation buttons toggle
-function toggleIrrigation(btn){
-  document.querySelectorAll('.irrigation-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  alert(`${btn.innerText} Irrigation Activated`);
-}
-
-// Initialize daily logs
-window.onload=filterLogs;
-</script>
+<script src="script.js"> </script>
 </body>
 </html>
