@@ -1,0 +1,24 @@
+{
+  "name": "draft_temperature_sensor_for_greenhouse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bearbrand-sy/DRAFT_TEMPERATURE_SENSOR_FOR_GREENHOUSE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bearbrand-sy/DRAFT_TEMPERATURE_SENSOR_FOR_GREENHOUSE/issues"
+  },
+  "homepage": "https://github.com/Bearbrand-sy/DRAFT_TEMPERATURE_SENSOR_FOR_GREENHOUSE#readme",
+  "devDependencies": {
+    "electron": "^40.1.0"
+  }
+}
